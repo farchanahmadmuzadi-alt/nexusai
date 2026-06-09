@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS AI | Multi Source Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Highlight.js untuk kode -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Marked.js untuk Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="dark-theme">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="nexus-logo">NEXUS</div>
+            <div class="loading-spinner"></div>
+            <p>Memuat Sistem Cerdas...</p>
+        </div>
+    </div>
+
+    <!-- Notifikasi -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Overlay Mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2 class="app-title">
+                <span class="neon-blue">NEXUS</span> AI
+            </h2>
+            <button id="closeSidebar" class="icon-btn">×</button>
+        </div>
+
+        <button id="newChatBtn" class="btn-primary w-full">
+            <span>+</span> Obrolan Baru
+        </button>
+
+        <div class="search-box">
+            <input type="text" id="searchChat" placeholder="Cari riwayat chat...">
+            <span>🔍</span>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Riwayat Obrolan</h3>
+            <div id="chatHistory" class="chat-history"></div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="stats-card glass">
+                <h4>Statistik Penggunaan</h4>
+                <div class="stat-item">
+                    <span>Token Terpakai:</span>
+                    <span id="tokenCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Obrolan:</span>
+                    <span id="chatCount">0</span>
+                </div>
+            </div>
+
+            <button id="exportAllChat" class="btn-secondary w-full mt-2">
+                💾 Ekspor Semua Chat
+            </button>
+
+            <button id="clearAllChat" class="btn-danger w-full mt-2">
+                🗑️ Hapus Semua
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header glass">
+            <button id="openSidebar" class="icon-btn md-hidden">☰</button>
+            <h1 id="currentChatTitle" class="chat-title">NEXUS AI - Multi Source Intelligence</h1>
+            
+            <div class="header-actions">
+                <button id="themeToggle" class="icon-btn" title="Ubah Tema">
+                    <span id="themeIcon">🌙</span>
+                </button>
+                <button id="settingsBtn" class="icon-btn" title="Pengaturan">⚙️</button>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <div id="chatContainer" class="chat-container">
+            <div id="chatMessages" class="chat-messages">
+                <!-- Pesan akan muncul di sini -->
+                <div class="welcome-message glass">
+                    <h2>👋 Selamat Datang di <span class="neon-blue">NEXUS AI</span></h2>
+                    <p>Sistem kecerdasan buatan yang mengumpulkan dan menganalisis informasi secara real-time dari berbagai sumber terpercaya.</p>
+                    <div class="features-grid">
+                        <div class="feature">🔍 Pencarian Web Real-time</div>
+                        <div class="feature">📊 Analisis Multi Sumber</div>
+                        <div class="feature">✅ Tingkat Kepercayaan</div>
+                        <div class="feature">📚 Referensi Lengkap</div>
+                    </div>
+                    <p class="text-sm">Silakan ajukan pertanyaan apa saja untuk memulai.</p>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typingIndicator" class="typing-indicator hidden">
+                <div class="glass p-3 rounded-xl">
+                    <span>NEXUS sedang berpikir</span>
+                    <div class="dots">
+                        <span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
+                <button id="stopGenerate" class="btn-danger btn-sm ml-3">⏹️ Berhenti</button>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container glass">
+            <div class="input-actions">
+                <button id="voiceInput" class="icon-btn" title="Input Suara">🎤</button>
+                <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                <button id="imageBtn" class="icon-btn" title="Unggah Gambar">🖼️</button>
+            </div>
+
+            <textarea 
+                id="userInput" 
+                placeholder="Tulis pesan Anda... (Shift+Enter untuk baris baru)"
+                rows="1"
+            ></textarea>
+
+            <button id="sendBtn" class="btn-primary send-btn" title="Kirim">
+                ➤
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal Pengaturan -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2>Pengaturan NEXUS AI</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <h4>Preferensi Tampilan</h4>
+                    <label class="setting-item">
+                        <span>Tema Gelap</span>
+                        <input type="checkbox" id="darkModeSetting" checked>
+                    </label>
+                    <label class="setting-item">
+                        <span>Efek Animasi</span>
+                        <input type="checkbox" id="animSetting" checked>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <h4>Pengaturan AI</h4>
+                    <label class="setting-item">
+                        <span>Tingkat Detail Jawaban</span>
+                        <select id="detailLevel">
+                            <option value="ringkas">Ringkas</option>
+                            <option value="sedang" selected>Sedang</option>
+                            <option value="lengkap">Lengkap</option>
+                        </select>
+                    </label>
+                    <label class="setting-item">
+                        <span>Tampilkan Sumber Referensi</span>
+                        <input type="checkbox" id="showSources" checked>
+                    </label>
+                    <label class="setting-item">
+                        <span>Tampilkan Tingkat Kepercayaan</span>
+                        <input type="checkbox" id="showConfidence" checked>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <h4>Suara & Input</h4>
+                    <label class="setting-item">
+                        <span>Text-to-Speech Otomatis</span>
+                        <input type="checkbox" id="autoTTS">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
